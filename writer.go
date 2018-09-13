@@ -9,9 +9,10 @@ import (
 	"fmt"
 	"log"
 	"runtime"
-	"time"
-	"strings"
 	"strconv"
+	"strings"
+	"time"
+	"runtime/debug"
 )
 
 const (
@@ -135,6 +136,7 @@ func (f *FileLogger) Error(depth int, format string, v ...interface{}) {
 	if f.logLevel <= ERROR {
 		fileName, funcName, line := getPrefix(depth)
 		f.logChan <- fmt.Sprintf("[%v:%v:%v]", fileName, funcName, line) + fmt.Sprintf("\033[1;31m[ERROR]"+format+"\033[0m", v...)
+		f.logChan <- fmt.Sprintf("%s", debug.Stack())
 	}
 }
 
